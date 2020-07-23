@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1=title
+  p List of products:
+  ul
+    each val in prod
+      li
+        a(href="/product/"+val.name )=val.name
