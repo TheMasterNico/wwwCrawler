@@ -38,17 +38,29 @@ let GetCategories = async (parentCat) => {
 	return result;
 };
 
-let GetProducts = async (Cat) => {
+let GetProducts   = async (Cat) => {
 	let db = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 	let coll = db.db(mongoDB).collection(productsColl);
 	let result = coll.find({ 'category': new RegExp('.*' + Cat + '$') }).toArray();
 	return result;
 }
+
 let GetOneProduct = async (name) => {
 	let db = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 	let coll = db.db(mongoDB).collection(productsColl);
 	let result = coll.findOne({ 'name': name });
 	return result;
+}
+
+function currencyFormat(num) {
+	return '$' + num.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+}
+
+let convertData = (arr) => {
+	for(let i in arr.prices) {		
+		arr.prices[i].new_price = currencyFormat(arr.prices[i].new_price);
+	}
+	return arr;
 }
 
 router.get('/', (req, res, next) => {
@@ -58,7 +70,6 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/cat/:category(*)', (req, res) => {
-	console.log(req.params.category);
 	GetCategories(req.params.category).then((result) => {
 		if (result.length) { // have categories
 			//console.log(result);
@@ -74,9 +85,11 @@ router.get('/cat/:category(*)', (req, res) => {
 })
 
 router.get('/product/:name(*)', (req, res) => {
-	GetOneProduct(req.params.name).then((result) => {
+	let name = req.params.name.replace(/\/$/, "") // Delete the last '/' from the param.name
+	GetOneProduct(name).then((result) => {
 		if (result) { // have categories
-			res.json(result)
+			let data = convertData(result);
+			res.render('product', { prod: data, title: result.name });
 		}
 		else {
 			res.json({status: false})
