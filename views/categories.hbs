@@ -1,0 +1,7 @@
+<h1>{{ title }}</h1>
+<p>Select one Category:</p>
+<ul>
+	{{#each categories}}
+		<li><a href="/cat/{{this.name}}">{{this.name}}</a></li>
+	{{/each}}
+</ul>

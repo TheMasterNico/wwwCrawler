@@ -38,7 +38,7 @@ let GetCategories = async (parentCat) => {
 	return result;
 };
 
-let GetProducts   = async (Cat) => {
+let GetProducts = async (Cat) => {
 	let db = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 	let coll = db.db(mongoDB).collection(productsColl);
 	let result = coll.find({ 'category': new RegExp('.*' + Cat + '$') }).toArray();
@@ -57,7 +57,7 @@ function currencyFormat(num) {
 }
 
 let convertData = (arr) => {
-	for(let i in arr.prices) {		
+	for (let i in arr.prices) {
 		arr.prices[i].new_price = currencyFormat(arr.prices[i].new_price);
 	}
 	return arr;
@@ -92,7 +92,7 @@ router.get('/product/:name(*)', (req, res) => {
 			res.render('product', { prod: data, title: result.name });
 		}
 		else {
-			res.json({status: false})
+			res.json({ status: false })
 		}
 	});
 })

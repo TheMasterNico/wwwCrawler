@@ -1,9 +1,0 @@
-extends layout
-
-block content
-  h1=title
-  a(href=prod.url)=prod.name
-  p Prices in time:
-  ul
-    each val in prod.prices
-      li= val.date + ': ' + val.new_price

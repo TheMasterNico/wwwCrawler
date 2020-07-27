@@ -1,0 +1,8 @@
+<h1>{{ title }}</h1>
+<a href="{{prod.url}}"></a>
+<p>Prices in time:</p>
+<ul>
+	{{#each prod.prices}}
+		<li>{{this.date}} -- {{ this.new_price }} </a></li>
+	{{/each}}
+</ul>
