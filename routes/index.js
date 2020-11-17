@@ -25,6 +25,7 @@ router.get('/product/:name(*)', async (req, res) => {
 	res.header("Access-Control-Allow-Origin", "http://localhost:3000");
 	let name = req.params.name.replace(/\/$/, "") // Delete the last '/' from the param.name
 	const result = await funcMongo.GetOneProduct(name);
+
 	if (result) {
 		res.json({ result, prefix_url: false });
 		//res.render('product', { prod: result, title: result.name });
